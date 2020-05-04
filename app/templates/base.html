@@ -1,0 +1,29 @@
+ 
+{% extends 'bootstrap/base.html' %}
+
+{% block styles%}
+{{ super() }}
+<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename= 'css/index.css') }}">
+{% endblock %}
+
+<body>
+  {%block navbar%}
+  {%include 'navbar.html'%}
+  {%endblock%}
+
+  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <ul class=flashes>
+    {% for category, message in messages %}
+    <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+
+  {% block content%}
+
+  {%endblock%}
+</body>

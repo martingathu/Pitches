@@ -1,0 +1,23 @@
+<div class="navbar navbar-inverse" role="navigation" >
+  <div class="container-fluid">
+      <div class="navbar-collapse collapse">
+          <div class="nav navbar-nav">
+              <a href="/" class="btn btn-info btn-lg" style="margin-top:20%;">
+                  <span class="glyphicon glyphicon-home"></span> 
+                </a>
+          </div>
+          <div class="nav navbar-nav">
+              <h3><a style="color:aliceblue;text-decoration: none;"href="/">PITCHER</a></h3>
+          </div>
+
+          <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('main.profile',uname=current_user.username)}}">Profile</a></li>
+            <li><a href="{{url_for('main.logout')}}">Sign out</a></li>
+            {% else %}
+            <li><a href="{{url_for('main.login')}}">Sign in</a></li>
+            {%endif%}
+          </ul>
+      </div>
+  </div>
+</div>
