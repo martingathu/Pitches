@@ -1,15 +1,8 @@
-# from .forms import UpdateProfile
-# from .. import db
-
-# class UpdateProfile(FlaskForm):
-#     bio = TextAreaField('Tell us about you.',validators = [Required()])
-#     submit = SubmitField('Submit')
-
-
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField
-from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, Email
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField, BooleanField
+from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, Email, Required
 from ..models import User
+from wtforms import ValidationError
 
 def invalid_credentials(form, field):
     """Username and password checker"""
@@ -27,19 +20,23 @@ class RegistrationForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(message='Username required'), Length(min=4, max=25, message='Username must be between 4 and 25 characters')])
     password = PasswordField('password', validators=[InputRequired(message='Password required'), Length(min=4, max=25, message='Password must be between 4 and 25 characters')])
     confirm_pswd = PasswordField('confirm Password', validators=[InputRequired(message='Password required'), EqualTo('password', message="Passwords must match")])
-    submit_button = SubmitField('Create')
+    submit_button = SubmitField('Sign up')
 
-    def validate_username(self, username):
-        user_object = User.query.filter_by(username=username.data).first()
-        if user_object:
-            raise ValidationError("Username already taken!")
+    def validate_email(self,data_field):
+            if User.query.filter_by(email =data_field.data).first():
+                raise ValidationError('There is an account with that email')
+
+    def validate_username(self,data_field):
+        if User.query.filter_by(username = data_field.data).first():
+            raise ValidationError('That username is taken')
+
 
 class LoginForm(FlaskForm):
     """Login form"""
 
     username = StringField('username', validators=[InputRequired(message="Username required")])
     password = PasswordField('password', validators=[InputRequired(message="Password required"), invalid_credentials])
-    submit_button = SubmitField('Login')
+    submit_button = SubmitField('Sign In')
 
 class UpdateProfile(FlaskForm):
     bio = TextAreaField('Tell us about you.',validators = [InputRequired(message="Bio is required")])
@@ -50,3 +47,8 @@ class PitchForm(FlaskForm):
     category = SelectField('category', choices=[('product', 'product'), ('interview', 'interview'), ('promotion', 'promotion')], validators=[InputRequired(message="Category required")])
     description = StringField('description', validators=[InputRequired(message="Description required")])
     submit= SubmitField('Update')
+
+
+class UpdateProfile(FlaskForm):
+    bio = TextAreaField('Tell us about you.',validators = [Required()])
+    submit = SubmitField('Submit')

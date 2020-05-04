@@ -7,17 +7,10 @@ from .. import db
 from flask_login import login_user,logout_user,login_required
 from ..email import mail_message
 from werkzeug.security import generate_password_hash
+from .forms import UpdateProfile
+from .forms import *
+from ..models import *
 
-# @main.route('/')
-# def index():
-
-#     '''
-#     View root page function that returns the index page and its data
-#     '''
-#     message = 'Hello Pitchez'
-
-#     title = 'HOME - best pitch of the day'
-#     return render_template('index.html', message = message, title=title)
 
 @main.route('/')
 def index():
@@ -63,15 +56,15 @@ def login():
 
     return render_template('login.html', form=login_form)
 
+
 @main.route('/user/<uname>', methods=['GET', 'POST'])
 def profile(uname):
     user = User.query.filter_by(username = uname).first()
     form = PitchForm()
 
-    if not current_user.is_authenticated:
-        flash('please login', 'danger')
-        return redirect(url_for('main.login'))
-
+    if user is None:
+        abort(404)
+    
     if form.validate_on_submit():
         title = form.title.data
         category = form.category.data
@@ -83,7 +76,7 @@ def profile(uname):
 
         return redirect(url_for('main.profile', uname=user.username))
 
-    return render_template("profile.html", user=user, form=form)
+    return render_template("profile/profile.html", user = user, form = form)
 
 @main.route('/logout', methods=['GET'])
 def logout():
