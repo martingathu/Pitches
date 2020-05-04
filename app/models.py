@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from . import login_manager
 from sqlalchemy import Enum
 import arrow
+from . import db
 
 
 @login_manager.user_loader
@@ -30,23 +31,14 @@ class User( UserMixin, db.Model):
     role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
-    pass_secure  = db.Column(db.String(255))
-    password_hash = db.Column(db.String(255))
-    
-    @property
-    def password(self):
-        raise AttributeError('You cannot read the password attribute')
-
-    @password.setter
-    def password(self, password):
-        self.pass_secure = generate_password_hash(password)
+    password  = db.Column(db.String(255))
 
 
     def verify_password(self,password):
-        return check_password_hash(self.pass_secure,password)
+        return check_password_hash(self.password,password)
     
-    def __repr__(self):
-        return f'User {self.username}'
+    
+
 
 
 choices = ['product', 'interview', 'promotion']
@@ -73,4 +65,14 @@ class Pitch(db.Model):
     def get_pitches(cls,owner_id):
         pitches = Pitch.query.filter_by(owner_id=owner_id).all()
         return pitches  
+
+class Comment(db.Model):
+    __tablename__='comments'
+    id = db.Column(db.Integer,primary_key=True)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= False)
+    description = db.Column(db.Text)
+    def __repr__(self):
+        return f"Comment : id: {self.id} comment: {self.description}"
+        
 
