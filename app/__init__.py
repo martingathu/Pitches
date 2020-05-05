@@ -4,6 +4,8 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_mail import Mail
+import arrow
+# from flask_uploads import UploadSet,configure_uploads,IMAGES
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -13,6 +15,8 @@ mail = Mail()
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+
+# photos = UploadSet('photos',IMAGES)
 
 def create_app(config_name):
     # Initializing application
@@ -34,5 +38,22 @@ def create_app(config_name):
     # Registering the blueprint
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+     # configure UploadSet
+    # configure_uploads(app,photos) 
+    # 
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    # from .request import configure_request
+    # configure_request(app)
+
+    def format_date(value):
+        dt = arrow.get(value).to('UTC+3')
+        return arrow.get(dt).humanize()
+
+
+    app.jinja_env.filters['timeago'] = format_date
+  
      
     return app

@@ -12,6 +12,8 @@ class Config:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
 
+    UPLOADED_PHOTOS_DEST ='app/static/images'
+
     # SECRET_KEY= os.environ.get("SECRET_KEY")
     SECRET_KEY = '25616796'
     

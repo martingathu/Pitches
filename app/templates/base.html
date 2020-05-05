@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename= 'css/index.css') }}">
 {% endblock %}
 
+
 <body>
   {%block navbar%}
   {%include 'navbar.html'%}
@@ -26,4 +27,6 @@
   {% block content%}
 
   {%endblock%}
+
+  <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
 </body>
