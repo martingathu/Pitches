@@ -28,6 +28,7 @@ def upgrade():
     sa.Column('profile_pic_path', sa.String(), nullable=True),
     sa.Column('role_id', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'))
+    
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=False)
     
