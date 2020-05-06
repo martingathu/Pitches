@@ -18,7 +18,7 @@ class Role(db.Model):
 
     id = db.Column(db.Integer,primary_key = True)
     name = db.Column(db.String(255))
-    username = db.relationship('User',backref = 'role',lazy="dynamic")
+    # users = db.relationship('User',backref = 'role',lazy="dynamic")
 
     def __repr__(self):
         return f'User {self.name}'
@@ -31,7 +31,7 @@ class User( UserMixin, db.Model):
     username = db.Column(db.String(50),index = True)
     email = db.Column(db.String(100),unique = True,index = True)
     password  = db.Column(db.String())
-    role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
+    # role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     
