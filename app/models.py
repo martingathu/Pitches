@@ -8,6 +8,7 @@ from . import db
 
 
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -27,16 +28,19 @@ class User( UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer,primary_key = True)
-    username = db.Column(db.String(255),index = True)
-    email = db.Column(db.String(255),unique = True,index = True)
+    username = db.Column(db.String(50),index = True)
+    email = db.Column(db.String(100),unique = True,index = True)
+    password  = db.Column(db.String())
     role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
-    password  = db.Column(db.String(255))
-
-
+    
     def verify_password(self,password):
         return check_password_hash(self.password,password)
+
+    
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
     
     
 
@@ -57,6 +61,7 @@ class Pitch(db.Model):
     date = db.Column(db.DateTime, nullable=False, default=arrow.utcnow().datetime)
     upvotes = db.Column(db.Integer, default=0)
     downvotes = db.Column(db.Integer, default=0)
+    # comments = db.relationship('Pitch', backref='user')
 
     def __repr__(self):
         return f'Pitch {self.description}'
@@ -75,5 +80,14 @@ class Comment(db.Model):
     description = db.Column(db.Text)
     def __repr__(self):
         return f"Comment : id: {self.id} comment: {self.description}"
+    
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comentss(cls,pitch_id):
+        Comment = Comment.query.filter_by(pitch_id=pitch_id).all()
+        return Comment 
         
 

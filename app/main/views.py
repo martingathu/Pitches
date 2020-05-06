@@ -15,8 +15,8 @@ from ..models import *
 
 @main.route('/')
 def index():
-
-    pitches = Pitch.query.all()
+    page = request.args.get('page', 1, type=int)
+    pitches = Pitch.query.order_by(Pitch.date.desc()).paginate(page=page, per_page=4)
     return render_template('index.html', pitches=pitches)
 
 
@@ -35,7 +35,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
 
-        flash('Registered successfully.Please login', 'success')
+        flash(f'Account created for {reg_form.username.data}! successfully.Please login', 'success')
 
         return redirect(url_for('main.login'))
         
@@ -48,13 +48,12 @@ def login():
 
     #login if validation is successful
     if login_form.validate_on_submit():
-
         # Get a user by username and check password matches hash
-        user_object =User.query.filter_by(username=login_form.username.data).first()
-        login_user(user_object)
-        return redirect(url_for('main.profile',uname=login_form.username.data))
-        
-
+        user_object = User.query.filter_by(username=login_form.username.data).first()
+        if user_object is not None and user_object.verify_password(login_form.password.data):
+            login_user(user_object)
+            return redirect(url_for('main.profile',uname=login_form.username.data))
+        flash('user or password not found. Please check username and password', 'danger')     
     return render_template('login.html', form=login_form)
 
 
@@ -63,9 +62,10 @@ def profile(uname):
     user = User.query.filter_by(username = uname).first()
     form = PitchForm()
 
-    if user is None:
-        abort(404)
-    
+    if not user.is_authenticated:
+        flash('please login', 'danger')
+        return redirect(url_for('main.login'))
+   
     if form.validate_on_submit():
         title = form.title.data
         category = form.category.data
@@ -76,8 +76,13 @@ def profile(uname):
         db.session.commit()
 
         return redirect(url_for('main.profile', uname=user.username))
+    
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=uname).first()
+    pitches = Pitch.query.filter_by(owner_id=user.id). order_by(Pitch.date.desc()).paginate(page=page, per_page=4)
+     
 
-    return render_template("profile/profile.html", user = user, form = form)
+    return render_template("profile/profile.html", user = user, pitches=pitches, form = form)
 
 @main.route('/logout', methods=['GET'])
 def logout():
@@ -85,6 +90,7 @@ def logout():
     flash('you have logged out successfuly', 'success')
 
     return redirect(url_for('main.index'))
+
 
 @main.route('/user/<uname>/update',methods = ['GET','POST'])
 @login_required
@@ -97,12 +103,20 @@ def update_profile(uname):
 
     if form.validate_on_submit():
         user.bio = form.bio.data
+        user.username = form.username.data
+        user.email = form.email.data
+        # user.profile_pic_path = form.profile_pic_path.data
 
         db.session.add(user)
         db.session.commit()
 
+        flash('you have Account has been updated successfuly', 'success')
         return redirect(url_for('main.profile',uname=user.username))
-
+        
+    elif request.method == 'GET':
+        form.username.data = user.username
+        form.email.data = user.email
+        form.bio.data = user.bio
     return render_template('profile/update.html',form =form)
 
 @main.route('/user/<uname>/update/pic',methods= ['POST'])
@@ -115,3 +129,4 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
+

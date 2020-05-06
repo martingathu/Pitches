@@ -11,20 +11,19 @@ HOME
 
         <div>
             <h1>Product Pitches</h1>
-            {% for item in pitches %}
+            {% for item in pitches.items %}
             {%if item.category == 'product'%}
 
             <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
                 <div class="panel-body">
                     <div>{{ item.description | capitalize }}</div>
                     <div><strong>Posted: </strong> {{item.date | timeago }}</div>
-                    <div class="like" style="padding: 10px;">
-                        <p id="like" ><span ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></span> {{upvote}}
-                        <span><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></span> {{downvote}}</p>
-                    
-                      </div>
-                    <div><strong>Comments </strong> </div>
-                </div> 
+                    <div class="like" style="padding-top: 10px;">
+                        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
+                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;"><strong>Comment</strong></a></p>
+                        
+                    </div>
+                </div>
             </div>
             {%endif%}
             {% endfor %}
@@ -32,19 +31,18 @@ HOME
 
         <div>
             <h1>Interview Pitches</h1>
-            {% for item in pitches %}
+            {% for item in pitches.items %}
             {%if item.category == 'interview'%}
 
             <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
                 <div class="panel-body">
                     <div>{{ item.description | capitalize }}</div>
                     <div><strong>Posted: </strong> {{item.date | timeago }}</div>
-                    <div class="like" style="padding: 10px;">
-                        <p id="like" ><span ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></span> {{upvote}}
-                        <span><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></span> {{downvote}}</p>
-                    
-                      </div>
-                    <div><strong>Comments </strong> </div>
+                    <div class="like" style="padding-top: 10px;">
+                        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
+                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;"><strong>Comment</strong></a></p>
+                        
+                    </div>
                 </div> 
             </div>
             {%endif%}
@@ -53,21 +51,33 @@ HOME
 
         <div>
             <h1>Promotion Pitches</h1>
-            {% for item in pitches %}
+            {% for item in pitches.items %}
             {%if item.category == 'promotion'%}
             <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
                 <div class="panel-body">
                     <div>{{ item.description | capitalize }}</div>
                     <div><strong>Posted: </strong> {{item.date | timeago }}</div>
-                    <div class="like" style="padding: 10px;">
-                        <p id="like" ><span ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></span> {{upvotes}}
-                        <span><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></span> {{downvotes}}</p>
-                    
-                      </div>
-                    <div><strong>Comments </strong> </div>
+                    <div class="like" style="padding-top: 10px;">
+                        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
+                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;"><strong>Comment</strong></a></p>
+                        
+                    </div>
                 </div> 
             </div>
             {%endif%}
+            {% endfor %}
+        </div>
+        <div style="border: 1px solid blue;">
+            {% for page_num in pitches.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if page_num %}
+                    {%if pitches.page == page_num %}
+                        <a class="btn btn-info mb-4" style="font-size: large;" href="{{ url_for('main.index', page=page_num)}}">{{ page_num}}</a>
+                    {% else %}
+                        <a class="btn btn-outline-danger" style="font-size: large;" href="{{ url_for('main.index', page=page_num)}}">{{ page_num}}</a>
+                    {% endif %}
+                {% else %}
+
+                {% endif %}
             {% endfor %}
         </div>
     </div>

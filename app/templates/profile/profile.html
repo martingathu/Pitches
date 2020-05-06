@@ -7,49 +7,72 @@ PROFILE
 
 {% block content %}
 <div class="container">
-<div class="row">
+    <div class="row">
 
-  <!--Display profile photo-->
-  <div class="col-md-4" style= "float:left;padding: 5%;border-radius: 5%;">
+        <!--Display profile photo-->
+        <div class="col-md-4 content-section" style= "float:left;padding: 1%;border-radius: 5%; font-size: large;">
 
-    {% if user.profile_pic_path %}
-    <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail img-circle img-respons img-thumbnail">
-    {%else%}
-    <img src="../static/images/profile.png" class="img-thumbnail img-circle img-respons img-thumbnail">
-    
-    {% endif %}
-    <!-- {% if user == current_user %}
-    <form  action="{{url_for('main.update_pic',uname=user.username)}}" method="post" enctype = "multipart/form-data">
+            {% if user.profile_pic_path %}
+            <img src="{{url_for('static',filename=user.profile_pic_path)}}" alt="" class="img-thumbnail img-circle img-respons img-thumbnail">
+            {%else%}
+            <img src="../static/images/profile.png" class="img-thumbnail img-circle img-respons img-thumbnail" style="width: 100px; height: 100px;">
+            
+            {% endif %}
 
-      <input type="file"  name="photo" class="form-control " required>
-      <input type="submit" class="btn btn-success">
-    </form>
-    {% endif %} -->
+            <h3> {{user.username| capitalize}} </h3>
+            <h4>{{user.email}}</h4>
+            
+            <!--Displaying user bio-->
+            {% if user.bio %}
+            <h3><strong>My Bio</strong></h3>
+              <p> {{user.bio}}</p>
+            {%else%}
+              <p> {{user.username| capitalize}} has no bio </p>
+            {% endif %}
 
-    <h3> {{user.username| capitalize}} </h3>
+            <h4>Total Posts {{pitches.total}}</h4>
+            <!-- update profile -->
+            {% if user == current_user %}
+            <a  class="btn btn-success" href="{{url_for('main.update_profile',uname=user.username)}}">Edit profile</a>
+            {% endif %}
+        </div>
 
-    <!--Displaying user bio-->
-    {% if user.bio %}
-      <p> {{user.bio}}</p>
-    {%else%}
-      <p> {{user.username| capitalize}} has no bio </p>
-    {% endif %}
-
-    <!-- update profile -->
-    {% if user == current_user %}
-    <a  class="btn btn-success" href="{{url_for('main.update_profile',uname=user.username)}}">Edit profile</a>
-    {% endif %}
-  </div>
-
-  <!-- displaying  Username-->
-  <div class="col-md-8">
-    <div class="" style="padding-left: 30%;">
-        <h1 style="padding-left: 10%;">POST YOUR PITCH</h1>
-        {{wtf.quick_form(form)}}
-  
-        {{form.csrf_token}}
+        <!-- displaying  Username-->
+        <div class="col-md-8">
+          <div class="" style="padding-left: 30%;">
+              <h1 style="padding-left: 10%;">POST YOUR PITCH</h1>
+              {{wtf.quick_form(form)}}
+        
+              {{form.csrf_token}}
+            </div>
+        </div>
       </div>
-  </div>
+      <div class="row">
+        <div class="col-md=10">
+          <h1 style="text-align: center;">My Posts</h1>
+            {% for item in pitches.items %}
+            <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
+                <div class="panel-body">
+                    <div>{{ item.description | capitalize }}</div>
+                    <div><strong>Posted: </strong> {{item.date | timeago }}</div>
+                    <div class="like" style="padding-top: 10px;">
+                        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
+                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;"><strong>Comment</strong></a></p>
+                        
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+        </div>
+          
+      </div>
+        </div>
+        
+      </div> 
+
+
+    </div>
+    
 </div>
-</div>
+
 {% endblock %}

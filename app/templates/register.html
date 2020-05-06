@@ -9,12 +9,17 @@ REGISTER
 <div class="container">
 <div class="row">
 <div class="col-md-2"> </div>
-<div class="col-md-8">
+    <div class="col-md-8">
 
-{{wtf.quick_form(form)}}
+    {{wtf.quick_form(form)}}
 
-</div>
-<div class="col-md-2"></div>
+    
+    <div>
+        <small class="text-muted">
+            Already Have An Account? <a class="ml-2" href="{{url_for('main.login')}}">Sign In</a>
+        </small>
+    </div>
+    </div>
 </div>
 </div>
 

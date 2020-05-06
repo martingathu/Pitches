@@ -20,11 +20,7 @@ db = SQLAlchemy()
 
 def create_app(config_name):
     # Initializing application
-    app = Flask(__name__)
-
-    @app.errorhandler(404)
-    def not_found(e):
-        return render_template("404.html") 
+    app = Flask(__name__,instance_relative_config=True)
 
     # Initializing flask extensions
     bootstrap.init_app(app)
@@ -34,6 +30,7 @@ def create_app(config_name):
 
     # Creating the app configurations
     app.config.from_object(config_options[config_name])
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Registering the blueprint
     from .main import main as main_blueprint

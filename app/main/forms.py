@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, TextAreaField, Sele
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, Email, Required
 from ..models import User
 from wtforms import ValidationError
+from flask_wtf.file import FileField, FileAllowed
 
 def invalid_credentials(form, field):
     """Username and password checker"""
@@ -33,22 +34,21 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     """Login form"""
-
     username = StringField('username', validators=[InputRequired(message="Username required")])
     password = PasswordField('password', validators=[InputRequired(message="Password required"), invalid_credentials])
+    remember = BooleanField('Remember Me')
     submit_button = SubmitField('Sign In')
-
-class UpdateProfile(FlaskForm):
-    bio = TextAreaField('Tell us about you.',validators = [InputRequired(message="Bio is required")])
-    submit= SubmitField('Update')
 
 class PitchForm(FlaskForm):
     title = StringField('title', validators=[InputRequired(message="Title required")])
     category = SelectField('category', choices=[('product', 'product'), ('interview', 'interview'), ('promotion', 'promotion')], validators=[InputRequired(message="Category required")])
     description = StringField('description', validators=[InputRequired(message="Description required")])
-    submit= SubmitField('Update')
+    submit= SubmitField('Post')
 
 
 class UpdateProfile(FlaskForm):
     bio = TextAreaField('Tell us about you.',validators = [Required()])
+    email = StringField('Your Email Address',validators=[InputRequired(),Email()])
+    username = StringField('username', validators=[InputRequired(message='Username required'), Length(min=4, max=25, message='Username must be between 4 and 25 characters')])
+    profile_pic_path = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')
