@@ -26,9 +26,9 @@ def upgrade():
     sa.Column('password_hash', sa.String(length=255), nullable=True),
     sa.Column('password_secure', sa.String(length=255), nullable=True),
     sa.Column('profile_pic_path', sa.String(), nullable=True),
-    sa.Column('role_id', sa.Integer(), nullable=True),
+    # sa.Column('role_id', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'))
-    
+
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=False)
     
@@ -50,7 +50,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_pitches_description'), 'pitches', ['description'], unique=False)
-    op.create_foreign_key(None, 'users', 'roles', ['role_id'], ['id'])
+    # op.create_foreign_key(None, 'users', 'roles', ['role_id'], ['id'])
     # ### end Alembic commands ###
 
 
