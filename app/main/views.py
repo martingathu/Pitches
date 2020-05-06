@@ -112,7 +112,7 @@ def update_profile(uname):
 
         flash('you have Account has been updated successfuly', 'success')
         return redirect(url_for('main.profile',uname=user.username))
-        
+
     elif request.method == 'GET':
         form.username.data = user.username
         form.email.data = user.email
@@ -129,4 +129,12 @@ def update_pic(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
+
+
+# @main.route('/user/<uname>',methods= ['GET','POST'])
+# @login_required
+# def comment(pitch):
+#     comments = CommentsForm()
+#     pitches = Pitch.query.filter_by(id=pitch).first()
+
 

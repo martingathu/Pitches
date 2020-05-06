@@ -46,8 +46,8 @@ def create_app(config_name):
     # configure_request(app)
 
     def format_date(value):
-        dt = arrow.get(value).to('UTC+3')
-        return arrow.get(dt).humanize()
+        # dt = arrow.get(value).to('UTC+3')
+        return arrow.get(value).humanize()
 
 
     app.jinja_env.filters['timeago'] = format_date
