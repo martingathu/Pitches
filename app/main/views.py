@@ -131,10 +131,25 @@ def update_pic(uname):
     return redirect(url_for('main.profile',uname=uname))
 
 
-# @main.route('/user/<uname>',methods= ['GET','POST'])
-# @login_required
-# def comment(pitch):
-#     comments = CommentsForm()
-#     pitches = Pitch.query.filter_by(id=pitch).first()
+@main.route('/<int:pname>/comment',methods = ['GET','POST'])
+@login_required
+def comment():
+    form = CommentsForm
+    pitches = Pitch.query.filter_by(pitches=pitches_id).first()
+    comment_query = Comment.query.filter_by(pitch_id = pitch_id).all()
+
+    
+
+    if form.validate_on_submit():
+        comment = form.comment.data
+        
+        db.session.add(Comment)
+        db.session.commit()
+
+        flash('your comment has been posted successfuly', 'success')
+    return redirect(url_for('main.profile',pitches_id=pitches.id ))
+
+   
+
 
 

@@ -62,7 +62,7 @@ class Pitch(db.Model):
     date = db.Column(db.DateTime, nullable=False, default=arrow.utcnow().datetime)
     upvotes = db.Column(db.Integer, default=0)
     downvotes = db.Column(db.Integer, default=0)
-    # comments = db.relationship('Pitch', backref='user')
+    comments = db.relationship('Comment', backref='pitches', lazy='dynamic')
 
     def __repr__(self):
         return f'Pitch {self.description}'
@@ -78,17 +78,18 @@ class Comment(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= False)
-    description = db.Column(db.Text)
+    comment = db.Column(db.Text)
     
     def __repr__(self):
-        return f"Comment : id: {self.id} comment: {self.description}"
+        return f"Comment('{self.user}', '{self.comment}')'"
     
     def save_comment(self):
+
         db.session.add(self)
         db.session.commit()
 
     @classmethod
-    def get_comentss(cls,pitch_id):
+    def get_coments(cls,pitch_id):
         Comment = Comment.query.filter_by(pitch_id=pitch_id).all()
         return Comment 
         

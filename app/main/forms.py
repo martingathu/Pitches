@@ -52,3 +52,8 @@ class UpdateProfile(FlaskForm):
     username = StringField('username', validators=[InputRequired(message='Username required'), Length(min=4, max=25, message='Username must be between 4 and 25 characters')])
     profile_pic_path = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')
+
+
+class CommentsForm(FlaskForm):
+    comment = TextAreaField('Type Comment.',validators = [Required()])
+    submit = SubmitField('Submit')
