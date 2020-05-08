@@ -35,6 +35,7 @@ class User( UserMixin, db.Model):
     # role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
+    pitch = db.relationship('Pitch', backref = 'user', lazy = 'dynamic')
     
     def verify_password(self,password):
         return check_password_hash(self.password,password)
