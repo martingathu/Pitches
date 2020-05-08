@@ -1,7 +1,7 @@
 from flask import render_template,request,redirect,url_for, abort, flash
 from . import main
 from ..models import User, Pitch
-from flask_login import login_required
+from flask_login import login_required, current_user
 from .forms import RegistrationForm, LoginForm
 from .. import db
 from flask_login import login_user,logout_user,login_required
@@ -133,21 +133,23 @@ def update_pic(uname):
 
 @main.route('/<int:pname>/comment',methods = ['GET','POST'])
 @login_required
-def comment():
-    form = CommentsForm
-    pitches = Pitch.query.filter_by(pitches=pitches_id).first()
-    comment_query = Comment.query.filter_by(pitch_id = pitch_id).all()
+def comment(pname):
+    form = CommentsForm()
+    pitches = Pitch.query.filter_by(id=pname).first()
+    comment_query = Comment.query.filter_by(pitch_id = pitches.id).all()
 
     
 
     if form.validate_on_submit():
-        comment = form.comment.data
+        comment = Comment(comment = form.comment.data, pitch_id = pitches.id, user_id= current_user.id)
         
-        db.session.add(Comment)
+        db.session.add(comment)
         db.session.commit()
 
         flash('your comment has been posted successfuly', 'success')
-    return redirect(url_for('main.profile',pitches_id=pitches.id ))
+        return redirect(url_for('main.comment', pname=pname))
+
+    return render_template('comments.html', form=form, pitches = pitches, comments = comment_query)
 
    
 

@@ -2,12 +2,31 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {%block title%}
-UPDATE BIO
+COMMENTS
 {%endblock%}
 
 {% block content %}
+<div class="panel-body container"  style ="background:rgb(87, 88, 90);color:white; padding: 3px; font-size: large;">
+    <div style="padding: 3px;"><strong style="color: cyan;">Title:</strong>{{ pitches.title}}</div>
+    <div style="padding: 3px;"><strong style="color: cyan;">Category:</strong>{{ pitches.category | capitalize }}</div>
+    <div>{{ pitches.description | capitalize }}</div>
+    <div style="padding: 3px;"><strong style="color: cyan;">Posted: </strong> {{pitches.date | timeago }}</div>
+    <div class="like" style="padding-top: 10px;">
+        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{pitches.upvotes}}
+        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{pitches.downvotes}} <a class="btn" style="font-size: large;" href="{{url_for('main.comment', pname = pitches.id)}}"><strong>Comment</strong></a></p>
+        
+    </div>
 
+</div>
 <div class="container">
   {{wtf.quick_form(form)}}
+  <div>
+    <h3 style="color: cyan;">Comments</h3>
+  {% for comment in comments%}
+  
+    <div style="padding: 3px; font-size: large;">{{ comment.comment}}</div>
+  {%endfor%}
+  </div>
 </div>
+
 {% endblock %}
