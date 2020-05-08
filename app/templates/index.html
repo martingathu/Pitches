@@ -10,14 +10,14 @@ HOME
     <div class="container">
 
         <div>
-            <h1>Product Pitches</h1>
             {% for item in pitches.items %}
-            {%if item.category == 'product'%}
-
-            <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
+            
+            <div class="panel" style ="background:rgb(87, 88, 90);color:white; padding: 3px;">
                 <div class="panel-body">
+                    <div style="color: whitesmoke; padding: 3px;"><strong style="color: cyan;">Title:</strong>{{ item.title}}</div>
+                    <div style="color: whitesmoke;padding: 3px;"><strong style="color: cyan;">Category:</strong>{{ item.category | capitalize }}</div>
                     <div>{{ item.description | capitalize }}</div>
-                    <div><strong>Posted: </strong> {{item.date | timeago }}</div>
+                    <div style="color: whitesmoke;padding: 3px;"><strong style="color: cyan;">Posted: </strong> {{item.date | timeago }}</div>
                     <div class="like" style="padding-top: 10px;">
                         <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
                         <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;" href=""><strong>Comment</strong></a></p>
@@ -25,48 +25,10 @@ HOME
                     </div>
                 </div>
             </div>
-            {%endif%}
+         
             {% endfor %}
         </div>
 
-        <div>
-            <h1>Interview Pitches</h1>
-            {% for item in pitches.items %}
-            {%if item.category == 'interview'%}
-
-            <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
-                <div class="panel-body">
-                    <div>{{ item.description | capitalize }}</div>
-                    <div><strong>Posted: </strong> {{item.date | timeago }}</div>
-                    <div class="like" style="padding-top: 10px;">
-                        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
-                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;" href=""><strong>Comment</strong></a></p>
-                        
-                    </div>
-                </div> 
-            </div>
-            {%endif%}
-            {% endfor %}
-        </div>
-
-        <div>
-            <h1>Promotion Pitches</h1>
-            {% for item in pitches.items %}
-            {%if item.category == 'promotion'%}
-            <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
-                <div class="panel-body">
-                    <div>{{ item.description | capitalize }}</div>
-                    <div><strong>Posted: </strong> {{item.date | timeago }}</div>
-                    <div class="like" style="padding-top: 10px;">
-                        <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
-                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;" href=""><strong>Comment</strong></a></p>
-                        
-                    </div>
-                </div> 
-            </div>
-            {%endif%}
-            {% endfor %}
-        </div>
         <div style="border: 1px solid blue;">
             {% for page_num in pitches.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                 {% if page_num %}

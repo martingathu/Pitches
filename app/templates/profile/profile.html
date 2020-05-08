@@ -53,11 +53,13 @@ PROFILE
             {% for item in pitches.items %}
             <div class="panel" style ="background:rgb(87, 88, 90);color:white;">
                 <div class="panel-body">
+                    <div style="color: whitesmoke; padding: 3px;"><strong style="color: cyan;">Title:</strong>{{ item.title}}</div>
+                    <div style="color: whitesmoke;padding: 3px;"><strong style="color: cyan;">Category:</strong>{{ item.category | capitalize }}</div>
                     <div>{{ item.description | capitalize }}</div>
-                    <div><strong>Posted: </strong> {{item.date | timeago }}</div>
+                    <div style="color: whitesmoke;padding: 3px;"><strong style="color: cyan;">Posted: </strong> {{item.date | timeago }}</div>
                     <div class="like" style="padding-top: 10px;">
                         <p ><a class="btn" ><img class="logo" style="width: 30px; height: 30px;" src="../static/images/like.png"/></a>{{item.upvotes}}
-                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;"><strong>Comment</strong></a></p>
+                        <a class="btn"><img class="logo" style="width: 30px; height: 30px;" src="../static/images/dislike.png"/></a> {{item.downvotes}} <a class="btn" style="color:white; font-size: large;" href=""><strong>Comment</strong></a></p>
                         
                     </div>
                 </div> 

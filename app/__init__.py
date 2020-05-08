@@ -46,7 +46,7 @@ def create_app(config_name):
     # configure_request(app)
 
     def format_date(value):
-        # dt = arrow.get(value).to('UTC+3')
+        dt = arrow.get(value).to('UTC')
         return arrow.get(value).humanize()
 
 
